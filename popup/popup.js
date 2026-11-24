@@ -250,6 +250,28 @@
     const res = await send({ type: 'getState' });
     if (res && res.ok) render(res.state);
     else showNotice('دریافت وضعیت ناموفق بود.', 'err');
+    loadDesktopVolume();
+  }
+
+  /** حجم اشتراک از اپ دسکتاپ (پیام‌رسانی بومی). اپ نباشد = هیچ خطی؛
+   * هرگز عدد ساختگی نشان داده نمی‌شود. */
+  async function loadDesktopVolume() {
+    const el = $('volumeLine');
+    if (!el) return;
+    const r = await send({ type: 'desktopStatus' });
+    if (!r || !r.ok || !r.plan) { el.classList.add('hidden'); return; }
+    if (!r.volume_limited) {
+      el.textContent = 'حجم: نامحدود';
+      el.classList.remove('hidden');
+      return;
+    }
+    const used = U.faNum(Number(r.used_gb || 0).toFixed(1));
+    const total = U.faNum(Number(r.volume_gb || 0).toFixed(1));
+    const pct = U.faNum(Math.round(r.usage_percent || 0));
+    el.textContent = r.volume_exceeded
+      ? 'حجم اشتراک تمام شد — برای ادامه تمدید کنید.'
+      : 'حجم: ' + used + ' از ' + total + ' گیگابایت (' + pct + '٪)';
+    el.classList.remove('hidden');
   }
 
   function startSpeedPolling() {
@@ -299,7 +321,9 @@
         if (!r.ok) {
           showNotice(r.error || 'اتصال ناموفق بود.', 'err');
           if (r.needHelper) {
-            const go = confirm('اپ دسکتاپ TAHA VPN 5G در حال اجرا نیست. راهنمای نصب باز شود؟');
+            const go = confirm(r.hostMissing
+              ? 'افزونه به اپ ویندوز وصل نیست؛ نسخه‌ی ویندوز را نصب کنید. راهنمای نصب باز شود؟'
+              : 'اپ دسکتاپ TAHA VPN 5G در حال اجرا نیست. راهنمای نصب باز شود؟');
             if (go) chrome.tabs.create({ url: chrome.runtime.getURL('pages/options.html') });
           }
         } else if (r.pendingAd) {

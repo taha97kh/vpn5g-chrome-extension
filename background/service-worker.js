@@ -2,7 +2,7 @@
  * مالک وضعیت اتصال، همگام‌سازی ۵ دقیقه‌ای، احراز هویت و تبلیغ است.
  * سرعت زنده در پاپ‌آپ خوانده می‌شود (سرویس‌ورکر نمی‌تواند هر ثانیه
  * بیدار بماند)؛ اتصال و قطع اتصال فقط اینجاست. */
-importScripts('../lib/constants.js', '../lib/util.js', '../lib/config.js', '../lib/supabase.js', '../lib/proxy.js', '../lib/ads.js');
+importScripts('../lib/constants.js', '../lib/util.js', '../lib/config.js', '../lib/supabase.js', '../lib/proxy.js', '../lib/native.js', '../lib/ads.js');
 
 const U = self.Vpn5gUtil;
 const C = self.VPN5G;
@@ -166,16 +166,21 @@ async function finishConnect(server, state) {
     const set = await self.Vpn5gProxy.setProxyFixed(direct.scheme, direct.host, direct.port);
     if (!set) return { ok: false, error: 'تنظیم پروکسی ناموفق بود.' };
   } else {
-    const helper = await self.Vpn5gProxy.probeHelper();
-    if (!helper.alive) {
-      return { ok: false, error: 'اپ دسکتاپ TAHA VPN 5G در حال اجرا نیست؛ اول آن را باز کنید.', needHelper: true };
-    }
-    const told = await self.Vpn5gProxy.tellHelperServer(server.uri);
-    if (!told.ok && told.reason === 'helper_old') {
-      return { ok: false, error: 'نسخه‌ی اپ دسکتاپ قدیمی است؛ آن را به‌روزرسانی کنید.', needHelper: true };
-    }
-    if (!told.ok) {
-      return { ok: false, error: 'ارتباط با اپ دسکتاپ برقرار نشد.', needHelper: true };
+    // دستور اتصال از راه پیام‌رسانی بومی به اپ دسکتاپ می‌رود (nmhost):
+    // میزبان نصب نشده = host_missing (راهنمای نصب)، اپ خاموش =
+    // app_not_running. هرگز بدون پاسخ درست میزبان «متصل» نمی‌شویم.
+    const nm = await self.Vpn5gNative.nativeConnect(server.uri);
+    if (!nm.ok) {
+      if (nm.error === 'host_missing') {
+        return { ok: false, error: 'افزونه به اپ ویندوز وصل نیست؛ اول نسخه‌ی ویندوز را با نصب‌کننده نصب کنید.', needHelper: true, hostMissing: true };
+      }
+      if (nm.error === 'app_not_running') {
+        return { ok: false, error: 'اپ دسکتاپ TAHA VPN 5G در حال اجرا نیست؛ اول آن را باز کنید.', needHelper: true };
+      }
+      if (nm.error === 'vip') {
+        return { ok: false, error: 'این سرور مخصوص مشترکین است؛ از بخش ویژه اشتراک تهیه کنید.' };
+      }
+      return { ok: false, error: nm.message || 'ارتباط با اپ دسکتاپ برقرار نشد.', needHelper: true };
     }
     const set = await self.Vpn5gProxy.setProxyFixed('socks5', C.HELPER_HOST, C.HELPER_SOCKS_PORT);
     if (!set) return { ok: false, error: 'تنظیم پروکسی ناموفق بود.' };
@@ -198,6 +203,9 @@ async function finishConnect(server, state) {
 }
 
 async function doDisconnect() {
+  // قطع در اپ دسکتاپ هم انجام می‌شود (بهترین تلاش — اگر میزبان نباشد،
+  // فقط پروکسی مرورگر پاک می‌شود و خطایی نشان داده نمی‌شود).
+  try { await self.Vpn5gNative.nativeDisconnect(); } catch (e) { /* بهترین تلاش */ }
   await self.Vpn5gProxy.clearProxy();
   await store.set({ connected: false, connectedServerId: null, exitIp: null, verified: false, pendingConnect: null });
   return { ok: true };
@@ -276,6 +284,12 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       }
       case 'disconnect': {
         sendResponse(await doDisconnect());
+        break;
+      }
+      case 'desktopStatus': {
+        // وضعیت زنده‌ی اپ دسکتاپ از راه پیام‌رسانی بومی: اتصال، سرعت،
+        // اشتراک و حجم. میزبان نباشد = host_missing (راهنمای نصب).
+        sendResponse(await self.Vpn5gNative.nativeStatus());
         break;
       }
       case 'selectServer': {
