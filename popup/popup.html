@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TAHA VPN 5G</title>
+<link rel="stylesheet" href="popup.css">
+</head>
+<body>
+<div id="app">
+  <header class="header">
+    <img class="logo" src="../icons/icon48.png" alt="TAHA VPN 5G">
+    <div class="brand">
+      <div class="brand-name">TAHA VPN 5G</div>
+      <div class="brand-sub" id="tierBadge">کاربر رایگان</div>
+    </div>
+    <button id="refreshBtn" class="icon-btn" title="به‌روزرسانی لیست">↻</button>
+  </header>
+
+  <div id="announcement" class="announce hidden">
+    <span id="announceText"></span>
+    <a id="announceLink" class="announce-link hidden" href="#" target="_blank" rel="noopener">مشاهده</a>
+    <button id="announceClose" class="announce-close" title="بستن">✕</button>
+  </div>
+
+  <div id="notice" class="notice hidden"></div>
+
+  <section class="connect-card">
+    <div class="speed-row">
+      <div class="speed"><span class="speed-label">دانلود</span><span class="speed-value" id="speedDown">—</span></div>
+      <div class="speed"><span class="speed-label">آپلود</span><span class="speed-value" id="speedUp">—</span></div>
+      <div class="speed"><span class="speed-label">وضعیت</span><span class="speed-value" id="connStatus">قطع</span></div>
+    </div>
+    <button id="connectBtn" class="connect-btn">اتصال</button>
+    <div id="serverLine" class="server-line">سروری انتخاب نشده است</div>
+    <div id="verifyLine" class="verify-line hidden"></div>
+  </section>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="home">خانه</button>
+    <button class="tab" data-tab="servers">سرورها</button>
+    <button class="tab" data-tab="premium">ویژه</button>
+    <button class="tab" data-tab="account">حساب</button>
+  </nav>
+
+  <main>
+    <section id="tab-home" class="tabpane active">
+      <h3>توصیه‌شده</h3>
+      <div id="recommendedList" class="server-list"></div>
+      <p class="hint" id="homeHint">سریع‌ترین سرورهای در دسترس — فقط سرورهای دارای پینگ نمایش داده می‌شوند.</p>
+    </section>
+
+    <section id="tab-servers" class="tabpane">
+      <button id="giftBtn" class="gold-btn">🎁 ثبت کد هدیه</button>
+      <div id="giftBox" class="redeem-box hidden">
+        <input id="giftCode" type="text" placeholder="کد هدیه را وارد کنید" autocomplete="off">
+        <button id="giftSubmit" class="primary-btn">فعال‌سازی هدیه</button>
+        <div id="giftMsg" class="msg"></div>
+      </div>
+      <div id="groupsList"></div>
+    </section>
+
+    <section id="tab-premium" class="tabpane">
+      <div class="premium-head">
+        <h3>ویژه</h3>
+        <p>سرورهای پرقدرت، بدون محدودیت زمانی و بدون تبلیغ.</p>
+      </div>
+      <div id="subStatus" class="sub-status">اشتراکی فعال نیست.</div>
+      <button id="redeemBtn" class="gold-btn">ثبت کد اشتراک خریداری‌شده</button>
+      <div id="redeemBox" class="redeem-box hidden">
+        <input id="redeemCode" type="text" placeholder="کد اشتراک را وارد کنید" autocomplete="off">
+        <button id="redeemSubmit" class="primary-btn">فعال‌سازی اشتراک</button>
+        <div id="redeemMsg" class="msg"></div>
+      </div>
+      <h3>طرح‌های اشتراک</h3>
+      <div id="plansList"></div>
+      <button id="buyBtn" class="primary-btn wide">خرید اشتراک از ربات</button>
+      <p class="hint">قیمت‌ها از سمت سرور خوانده می‌شوند و توسط ادمین در ربات تعیین می‌گردند.</p>
+    </section>
+
+    <section id="tab-account" class="tabpane">
+      <div id="authBox">
+        <input id="emailInput" type="email" placeholder="ایمیل" autocomplete="email" dir="ltr">
+        <input id="passwordInput" type="password" placeholder="رمز عبور (حداقل ۶ کاراکتر)" autocomplete="current-password">
+        <div class="row-btns">
+          <button id="loginBtn" class="primary-btn">ورود</button>
+          <button id="signupBtn" class="ghost-btn">ثبت‌نام</button>
+        </div>
+        <button id="recoverBtn" class="link-btn">رمز عبور را فراموش کرده‌ام</button>
+        <div id="authMsg" class="msg"></div>
+        <p class="hint">هر اینترنت فقط یک حساب. ثبت‌نام فقط با ایمیل و رمز عبور است؛ کدی ارسال نمی‌شود.</p>
+      </div>
+      <div id="userBox" class="hidden">
+        <div class="user-email" id="userEmail"></div>
+        <div class="user-tier" id="userTier"></div>
+        <button id="logoutBtn" class="ghost-btn">خروج از حساب</button>
+      </div>
+      <hr>
+      <button id="supportBtn" class="ghost-btn wide">پشتیبانی آنلاین</button>
+      <button id="optionsBtn" class="ghost-btn wide">تنظیمات</button>
+      <p class="footer">ساخته شده توسط AREF KH — ۲۰۲۶ - ۱۴۰۵<br>ربات: @VPN5G_IRBot — کانال: @VPNCRACKNET</p>
+    </section>
+  </main>
+</div>
+<script src="../lib/constants.js"></script>
+<script src="../lib/util.js"></script>
+<script src="../lib/config.js"></script>
+<script src="../lib/supabase.js"></script>
+<script src="../lib/proxy.js"></script>
+<script src="../lib/ads.js"></script>
+<script src="popup.js"></script>
+</body>
+</html>

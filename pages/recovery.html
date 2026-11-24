@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>بازیابی رمز عبور — TAHA VPN 5G</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 24px;
+    font-family: Tahoma, "Segoe UI", sans-serif;
+    background: linear-gradient(180deg, #000000 0%, #0a0a0a 55%, #06231f 100%);
+    color: #f1f5f9; font-size: 14px; line-height: 2;
+  }
+  .wrap { max-width: 420px; margin: 40px auto; }
+  .card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 14px; padding: 20px;
+  }
+  input {
+    width: 100%; padding: 10px 12px; margin: 6px 0;
+    border-radius: 10px; border: 1px solid #263238;
+    background: rgba(255,255,255,0.06); color: #f1f5f9; font-size: 14px;
+  }
+  button {
+    width: 100%; padding: 11px; border: none; border-radius: 12px;
+    background: #2563eb; color: #fff; font-size: 15px; font-weight: bold;
+    cursor: pointer; margin-top: 8px;
+  }
+  .msg { font-size: 13px; margin-top: 10px; min-height: 18px; }
+  .msg.ok { color: #69f0ae; }
+  .msg.err { color: #ff8a80; }
+  .footer { font-size: 12px; color: #64748b; text-align: center; margin-top: 24px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>بازیابی رمز عبور</h1>
+  <div class="card">
+    <p id="hint">رمز عبور جدید را وارد کنید.</p>
+    <input id="newPassword" type="password" placeholder="رمز عبور جدید (حداقل ۶ کاراکتر)">
+    <input id="newPassword2" type="password" placeholder="تکرار رمز عبور جدید">
+    <button id="submitBtn">ثبت رمز جدید</button>
+    <div id="msg" class="msg"></div>
+  </div>
+  <p class="footer">TAHA VPN 5G — ساخته شده توسط AREF KH</p>
+</div>
+<script src="../lib/constants.js"></script>
+<script src="../lib/util.js"></script>
+<script src="../lib/supabase.js"></script>
+<script src="recovery.js"></script>
+</body>
+</html>

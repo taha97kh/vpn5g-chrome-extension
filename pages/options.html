@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>تنظیمات — TAHA VPN 5G</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 24px;
+    font-family: Tahoma, "Segoe UI", sans-serif;
+    background: linear-gradient(180deg, #000000 0%, #0a0a0a 55%, #06231f 100%);
+    color: #f1f5f9; font-size: 14px; line-height: 2;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; }
+  h1 { font-size: 20px; }
+  h2 { font-size: 16px; margin-top: 28px; }
+  .card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 14px; padding: 16px 18px; margin: 12px 0;
+  }
+  label { display: block; font-size: 13px; color: #94a3b8; margin-top: 10px; }
+  input {
+    width: 100%; padding: 10px 12px; margin-top: 4px;
+    border-radius: 10px; border: 1px solid #263238;
+    background: rgba(255,255,255,0.06); color: #f1f5f9; font-size: 14px;
+  }
+  button {
+    padding: 10px 18px; border: none; border-radius: 12px;
+    background: #2563eb; color: #fff; font-size: 14px; font-weight: bold;
+    cursor: pointer; margin-top: 12px;
+  }
+  button.ghost { background: rgba(255,255,255,0.07); border: 1px solid #263238; }
+  a { color: #00e5cc; }
+  .msg { font-size: 13px; margin-top: 8px; min-height: 18px; }
+  .msg.ok { color: #69f0ae; }
+  .msg.err { color: #ff8a80; }
+  code { direction: ltr; display: inline-block; background: rgba(255,255,255,0.08); padding: 2px 8px; border-radius: 6px; }
+  .footer { font-size: 12px; color: #64748b; text-align: center; margin-top: 30px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>تنظیمات TAHA VPN 5G</h1>
+
+  <h2>کمک‌کننده‌ی محلی (اپ دسکتاپ)</h2>
+  <div class="card">
+    <p>تونل واقعی VLESS و VMess و Trojan و Shadowsocks داخل مرورگر اجرا نمی‌شود؛ افزونه از اپ دسکتاپ TAHA VPN 5G روی همین رایانه استفاده می‌کند. اگر اپ دسکتاپ در حال اجرا نباشد، اتصال انجام نمی‌شود.</p>
+    <label>آدرس کمک‌کننده</label>
+    <input id="helperHost" type="text" dir="ltr" value="127.0.0.1">
+    <label>درگاه SOCKS</label>
+    <input id="helperSocksPort" type="number" dir="ltr" value="10809">
+    <label>درگاه صفحه‌ی وب</label>
+    <input id="helperWebPort" type="number" dir="ltr" value="17890">
+    <button id="saveBtn">ذخیره</button>
+    <button id="probeBtn" class="ghost">بررسی وضعیت کمک‌کننده</button>
+    <div id="helperMsg" class="msg"></div>
+  </div>
+
+  <h2>راهنما</h2>
+  <div class="card">
+    <p>۱. ثبت‌نام کنید یا وارد شوید (از پاپ‌آپ افزونه).</p>
+    <p>۲. اپ دسکتاپ TAHA VPN 5G را روی ویندوز باز کنید تا کمک‌کننده در حال اجرا باشد.</p>
+    <p>۳. از پاپ‌آپ افزونه یک سرور انتخاب و «اتصال» را بزنید. اتصال اول بدون تبلیغ است؛ از اتصال دوم به بعد پیش از اتصال یک تبلیغ تمام‌صفحه نمایش داده می‌شود.</p>
+    <p>۴. برای خرید اشتراک یا پشتیبانی، به ربات بروید: <a href="https://t.me/VPN5G_IRBot" target="_blank" rel="noopener">@VPN5G_IRBot</a></p>
+  </div>
+
+  <h2>درباره</h2>
+  <div class="card">
+    <p>نسخه: <span id="version">۱.۰.۰</span></p>
+    <p>سازنده: AREF KH — ۲۰۲۶ - ۱۴۰۵</p>
+    <p>ربات: <a href="https://t.me/VPN5G_IRBot" target="_blank" rel="noopener">@VPN5G_IRBot</a></p>
+    <p>کانال: <a href="https://t.me/VPNCRACKNET" target="_blank" rel="noopener">@VPNCRACKNET</a></p>
+  </div>
+
+  <p class="footer">TAHA VPN 5G — ساخته شده توسط AREF KH</p>
+</div>
+<script src="../lib/constants.js"></script>
+<script src="../lib/util.js"></script>
+<script src="../lib/proxy.js"></script>
+<script src="options.js"></script>
+</body>
+</html>
